@@ -1,7 +1,7 @@
 /*
 PsuedoCode
 
-create array = ["rock","paper","sissors"]
+create array = ["rock","paper","scissors"]
 
 
 function randomComputerChoice(move)
@@ -11,7 +11,7 @@ function randomComputerChoice(move)
 
 
 function playerChoice(move)
-    player will pick moves "Rock","Paper","Sissors"
+    player will pick moves "Rock","Paper","Scissors"
     return move
 
 function gameplay
@@ -22,9 +22,9 @@ function gameplay
     let comp = randomComputerChoice()
     let self = playerChoice()
 
-    if ((self."rock" && comp."sissors") || (self."paper" && comp."rock") || (self."sissors" && comp."paper"))
+    if ((self."rock" && comp."scissors") || (self."paper" && comp."rock") || (self."scissors" && comp."paper"))
         then player win
-    else if ((self."rock" && comp."rock") || (self."paper" && comp."paper") || (self."sissors" && comp."sissors"))
+    else if ((self."rock" && comp."rock") || (self."paper" && comp."paper") || (self."scissors" && comp."scissors"))
         then tie
     else
         you lose
@@ -38,7 +38,7 @@ function winloss
         then add one to tie
 */
 
-const moves = ["rock", "paper", "sissors"];
+const moves = ["rock", "paper", "scissors"];
 var playerWin = 0;
 var compWin = 0;
 var tie = 0;
@@ -62,10 +62,10 @@ function gameplay() {
     let compSelection = randomComputerChoice();
     console.log(compSelection);
 
-    if ((playerSelection == 'rock' && compSelection == 'sissors') || (playerSelection == 'paper' && compSelection == 'rock') || (playerSelection == 'sissors' && compSelection == 'paper')) {
+    if ((playerSelection == 'rock' && compSelection == 'scissors') || (playerSelection == 'paper' && compSelection == 'rock') || (playerSelection == 'scissors' && compSelection == 'paper')) {
         console.log('player win');
         winlosstie('win');
-    } else if ((playerSelection == 'rock' && compSelection == 'paper') || (playerSelection == 'paper' && compSelection == 'sisscors') || (playerSelection == 'sissors' && compSelection == 'rock')) {
+    } else if ((playerSelection == 'rock' && compSelection == 'paper') || (playerSelection == 'paper' && compSelection == 'sisscors') || (playerSelection == 'scissors' && compSelection == 'rock')) {
         console.log('Comp wins');
         winlosstie('loss');
     } else {
