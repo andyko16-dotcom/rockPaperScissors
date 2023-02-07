@@ -38,15 +38,18 @@ function winloss
         then add one to tie
 */
 
-const moves = ["rock", "paper", "scissors"];
+
+
+
+//Rock Paper Scissors
+/*const moves = ["rock", "paper", "scissors"];
 var playerWin = 0;
 var compWin = 0;
 var tie = 0;
 
-function randomComputerChoice() {
-    var choice = moves[Math.floor(Math.random() * moves.length)];
-    console.log(moves);
-    return moves[choice];
+function randomComputerChoice(move) {
+    move = moves[Math.floor(Math.random() * moves.length)];
+    return move;
 }
 
 function playerChoice() {
@@ -65,7 +68,7 @@ function gameplay() {
     if ((playerSelection == 'rock' && compSelection == 'scissors') || (playerSelection == 'paper' && compSelection == 'rock') || (playerSelection == 'scissors' && compSelection == 'paper')) {
         console.log('player win');
         winlosstie('win');
-    } else if ((playerSelection == 'rock' && compSelection == 'paper') || (playerSelection == 'paper' && compSelection == 'sisscors') || (playerSelection == 'scissors' && compSelection == 'rock')) {
+    } else if ((playerSelection == 'rock' && compSelection == 'paper') || (playerSelection == 'paper' && compSelection == 'scissors') || (playerSelection == 'scissors' && compSelection == 'rock')) {
         console.log('Comp wins');
         winlosstie('loss');
     } else {
@@ -87,3 +90,4 @@ function winlosstie(who) {
 }
 
 gameplay();
+*/
