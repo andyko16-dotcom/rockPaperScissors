@@ -8,3 +8,29 @@ What my goal is creating RockPaperSissors in JS:
     -I created the foudation of game in html,js,css
     -created foundation of rockpapersissors
     -need to fix randomCompChoice; returns undefined
+
+2/1/2023:
+   -corrected spelling errors
+   -decided to make a pixel art fighter style verison of rock paper scissors
+   -planning how i would like my website to look
+
+2/3/2023:
+   - after two days of planning i have decided to make a rock paper scissors game with minigames within it
+   - i have decided also to add player movement similar to pokemon
+   - the minigames i have decided to add are going to maybe be pong, a time limit survival, button mashing game
+   - today i have also created sprites from pokemon fire red
+
+2/4/2023:
+   -i have add player movement
+   -updated sprites so it fits nicely on the canvas background img
+   -trying to create boundaries
+
+2/5/2023:
+   -got stuck on having boundaries fit in the right place
+   -learned to not believe typeof for parameters
+   -now trying to get img of character looking down width and height bc it is reading Nan
+   -fixed having boundaries fit in the right place
+
+2/6/2023:
+   -skipped a step in tutorial: figured out how to get character width and height
+   -came across an error when i would collide with collision block: it was a simple typo error that took me 3 hours to figure out.
