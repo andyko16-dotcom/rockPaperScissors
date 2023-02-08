@@ -34,3 +34,7 @@ What my goal is creating RockPaperSissors in JS:
 2/6/2023: 3hrs~
    - skipped a step in tutorial: figured out how to get character width and height
    - came across an error when i would collide with collision block: it was a simple typo error that took me 3 hours to figure out.
+
+2/7/2023: 3hrs~
+   - after finishing collision blocks, i have started working on battlezones
+   - this works the same as collision blocks, but i am stuck again with having character trigger console.log when character is touching battleZone.
