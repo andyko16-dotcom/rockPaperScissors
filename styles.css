@@ -2,8 +2,12 @@ html {
     margin: 0;
     width: 100%;
     height: 100%;
+    
 }
 
+* {
+    font-family: 'Press Start 2P', cursive;
+}
 body {
     background-color: black;
     display: flex;
@@ -13,11 +17,13 @@ body {
     height: 100%;
     justify-content: center;
     align-items: center;
+    
 }
 
 .mainDisplay {
     display: inline-block;
     position: relative;
+    margin: 0;
 }
 
 .battleStart {
@@ -28,4 +34,103 @@ body {
     left:0; 
     bottom:0;
     opacity: 0;
+}
+
+.battleMenu {
+    background-color: white;
+    width: 99.5%;
+    height: 150px;
+    position: absolute;
+    bottom: 0;
+    border: 4px;
+    border-style: solid;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+button {
+    display: grid;
+    grid-template-rows: auto;
+    width: calc(100%/3);
+    height: 150px;
+    align-items: center;
+    border: 0px;
+    cursor: pointer;
+    font-size: large;
+    
+}
+
+button:hover {
+    background-color: #ccc;
+}
+
+.bossStatus {
+    width: 450px;
+    height: 100px;
+    background-color: white;
+    border: 4px;
+    border-style: solid;
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.bossHp {
+    height: 8px;
+    background-color: #9c9c9c;
+    border-radius: 4px;
+    
+    
+}
+
+.bossHptwo {
+    height: 8px;
+    background-color: green;
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    width: 50%;
+    border-radius: 4px;
+
+    
+}
+
+.playerStatus {
+    width: 450px;
+    height: 100px;
+    background-color: white;
+    border: 4px;
+    border-style: solid;
+    position: absolute;
+    top: 290px;
+    left: 480px;
+    
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.playerHp {
+    height: 8px;
+    background-color: #9c9c9c;
+    border-radius: 4px;
+    
+    
+}
+
+.playerHptwo {
+    height: 8px;
+    background-color: green;
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    width: 50%;
+    border-radius: 4px;
+
+    
 }
