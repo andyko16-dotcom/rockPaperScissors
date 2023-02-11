@@ -140,7 +140,42 @@ class Sprite {
             if (this.frames.val < this.frames.max) this.frames.val++
             else this.frames.val = 0
         }
-    }   
+    }
+    
+    attack({attack, recipient}) {
+        const tl = gsap.timeline()
+
+        tl.to(this.position, {
+            x: this.position.x - 40,
+            onComplete() {
+                gsap.to(recipient.position, {
+                    x: recipient.position.x + 40
+                })
+            }
+        })
+        .to(this.position, {
+            x: this.position.x + 190,
+            y: this.position.y - 150,
+            onComplete() {
+                gsap.to(recipient.position, {
+                    x: recipient.position.x - 300,
+                    y: recipient.position.y + 80
+                })
+            }
+        })
+        .to(this.position, {
+            x: this.position.x,
+            y: this.position.y,
+            onComplete() {
+                gsap.to(recipient.position, {
+                    x: recipient.position.x + 300,
+                    y: recipient.position.y - 80
+                    
+                })
+            } 
+        })
+
+    }
 }
 
 const player = new Sprite ({
@@ -439,5 +474,20 @@ function animateBattle() {
     trainer.draw();
     
 }
+
+
+document.querySelectorAll('button').forEach(button => {
+    button.addEventListener('click', () => {
+        trainer.attack({
+            attack: {
+                name: 'ROCK',
+                damage: 20,
+            },
+            recipient: boss
+        })
+    })
+})
+
+
 
 animateBattle();
