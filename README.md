@@ -36,5 +36,19 @@ What my goal is creating RockPaperSissors in JS:
    - came across an error when i would collide with collision block: it was a simple typo error that took me 3 hours to figure out.
 
 2/7/2023: 3hrs~
+   - added foreground, which makes it seem like character is behind an object
    - after finishing collision blocks, i have started working on battlezones
    - this works the same as collision blocks, but i am stuck again with having character trigger console.log when character is touching battleZone.
+
+2/8/2023: 3hrs~
+   - created battle transition when character enters the zone
+   - learned how to use gsap to add battle transition screen effects
+   - loaded background picture of battle image
+
+2/9/2023: 
+   - break
+
+2/10/2023: 2hrs ~
+   - while in battle scene, added trainer image and boss image
+   - added boss image onto dungeon.png
+   - will not set animation of trainer and boss image becuase it will take too long to create, but i have created a way to easily add sprite animation during battle scene
