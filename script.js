@@ -30,6 +30,16 @@ playerRightImage.src = 'img/right.png'
 const foregroundObjects = new Image();
 foregroundObjects.src = 'img/foregroundObjects.png'
 
+const battleBackgroundImage = new Image();
+battleBackgroundImage.src = 'img/battleBackground.png'
+
+const bossImage = new Image();
+bossImage.src = 'img/boss.png'
+
+const trainerImage = new Image();
+trainerImage.src = 'img/trainer.png'
+
+
 
 const collisionsMap = []
 for (let i = 0; i < collisions.length; i += 45) {
@@ -92,7 +102,7 @@ collisionsMap.forEach((row, i) => {
 
 
 class Sprite {
-    constructor({position, velocity, image, frames = { max: 1}, sprites}) {
+    constructor({position, image, frames = { max: 1, hold: 10}, sprites, animate = false}) {
         this.position = position
         this.image = image
         this.frames = {...frames, val: 0, elasped:0}
@@ -103,7 +113,7 @@ class Sprite {
             this.height = this.image.height;
 
         }
-        this.moving = false
+        this.animate = animate
         
     }
 
@@ -120,13 +130,13 @@ class Sprite {
             this.image.height
         );
         
-        if (!this.moving) return
+        if (!this.animate) return
 
         if (this.frames.max > 1) {
             this.frames.elasped++
         }
 
-        if (this.frames.elasped % 10 === 0){
+        if (this.frames.elasped % this.frames.hold === 0){
             if (this.frames.val < this.frames.max) this.frames.val++
             else this.frames.val = 0
         }
@@ -141,7 +151,8 @@ const player = new Sprite ({
     
     image: playerDownImage,
     frames: {
-        max: 2.99
+        max: 2.99,
+        hold: 10
     },
     sprites: {
         up: playerUpImage,
@@ -169,6 +180,8 @@ const foreground = new Sprite({
 })
 
 
+let lastKey = '';
+
 const keys = {
     w: {
         pressed: false
@@ -183,146 +196,6 @@ const keys = {
         pressed: false
     }
 }
-
-
-const moveable = [background, ...boundaries, foreground, ...battleZones]
-
-
-function rectCollision ({rectangle1, rectangle2}) {
-    return (
-        rectangle1.position.x + (rectangle1.width) >= rectangle2.position.x && 
-        rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&  
-        rectangle1.position.y <= rectangle2.position.y + rectangle2.height &&  
-        rectangle1.position.y + (rectangle1.height) >= rectangle2.position.y
-        )
-}
-
-if (!keys.w.pressed || !keys.a.pressed || !keys.d.pressed || !keys.s.pressed) {
-    for (let i = 0; i < battleZones.length; i++) {
-        const battleZone = battleZones[i]
-        
-        if (rectCollision({
-                rectangle1: player,
-                rectangle2: battleZone
-            })
-        ) {
-            console.log('battlezone')
-            break
-        }
-    }
-}
-
-function animate() {
-    window.requestAnimationFrame(animate)
-    background.draw()
-    boundaries.forEach((boundary) => {
-        boundary.draw();   
-    })
-    battleZones.forEach((battleZone) => {
-        battleZone.draw();   
-    })
-    
-    player.draw()
-    
-    foreground.draw()
-
-    let moving = true
-    player.moving = false
-
-    if (keys.w.pressed && lastKey === 'w') {
-        player.moving = true
-        player.image = player.sprites.up
-        for (let i = 0; i < boundaries.length; i++) {
-            const boundary = boundaries[i]
-            
-            if (rectCollision({
-                rectangle1: player,
-                rectangle2: {...boundary, 
-                    position: {
-                        x: boundary.position.x,
-                        y: boundary.position.y + 4
-                }}
-            })) {
-
-                moving = false 
-                break
-            }
-        }
-        if (moving) 
-         moveable.forEach((moveable) => {
-            moveable.position.y += 4;
-            })
-    } else if (keys.s.pressed && lastKey === 's') {
-        player.moving = true
-        player.image = player.sprites.down
-        for (let i = 0; i < boundaries.length; i++) {
-            const boundary = boundaries[i]
-            if (rectCollision({
-                rectangle1: player,
-                rectangle2: {...boundary, 
-                    position: {
-                        x: boundary.position.x,
-                        y: boundary.position.y - 4
-                }}
-            })) {
-
-                moving = false 
-                break
-            }
-        }
-        if (moving) 
-        moveable.forEach((moveable) => {
-            moveable.position.y -= 4;
-        })
-    } else if (keys.a.pressed && lastKey === 'a') {
-        player.moving = true
-        player.image = player.sprites.left
-        for (let i = 0; i < boundaries.length; i++) {
-            const boundary = boundaries[i]
-            if (rectCollision({
-                rectangle1: player,
-                rectangle2: {...boundary, 
-                    position: {
-                        x: boundary.position.x + 4,
-                        y: boundary.position.y 
-                }}
-            })) {
-
-                moving = false 
-                break
-            }
-        }
-        if (moving) 
-        moveable.forEach((moveable) => {
-        moveable.position.x += 4;
-        })
-    } else if (keys.d.pressed && lastKey === 'd') {
-        player.moving = true
-        player.image = player.sprites.right
-        for (let i = 0; i < boundaries.length; i++) {
-            const boundary = boundaries[i]
-            if (rectCollision({
-                rectangle1: player,
-                rectangle2: {...boundary, 
-                    position: {
-                        x: boundary.position.x - 4,
-                        y: boundary.position.y 
-                }}
-            })) {
-
-                moving = false 
-                break
-            }
-        }
-        if (moving) 
-        moveable.forEach((moveable) => {
-        moveable.position.x -= 4;
-        })
-    }
-}
-animate();
-
-let lastKey = '';
 
 window.addEventListener('keydown', (move) => {
     switch (move.key) {
@@ -364,3 +237,207 @@ window.addEventListener('keyup', (move) => {
     }
     
 });
+
+
+const moveable = [background, ...boundaries, foreground, ...battleZones]
+
+
+function rectCollision ({rectangle1, rectangle2}) {
+    return (
+        rectangle1.position.x + (rectangle1.width) >= rectangle2.position.x && 
+        rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&  
+        rectangle1.position.y <= rectangle2.position.y + rectangle2.height &&  
+        rectangle1.position.y + (rectangle1.height) >= rectangle2.position.y
+        )
+}
+
+const battle = {
+    initiated: false
+}
+
+function animate() {
+    const animationID = window.requestAnimationFrame(animate)
+    background.draw()
+    boundaries.forEach((boundary) => {
+        boundary.draw();   
+    })
+    battleZones.forEach((battleZone) => {
+        battleZone.draw();   
+    })
+    
+    player.draw()
+    
+    foreground.draw()
+
+    let moving = true
+    player.animate = false
+
+    if(battle.initiated) return
+
+    if (keys.w.pressed || keys.a.pressed || keys.d.pressed || keys.s.pressed) {
+        for (let i = 0; i < battleZones.length; i++) {
+            const battleZone = battleZones[i]
+            
+            if (rectCollision({
+                    rectangle1: player,
+                    rectangle2: battleZone
+                })
+            ) {
+                console.log('activated battlezone')
+                battle.initiated = true
+                window.cancelAnimationFrame(animationID)
+                gsap.to('.battleStart', {
+                    opacity: 1,
+                    repeat: 13,
+                    yoyo: true,
+                    duration: 0.1,
+                    onComplete() {
+                        gsap.to('.battleStart', {
+                            opacity: 1,
+                            duration: 0.1,
+                            onComplete() {
+                                animateBattle();
+                                gsap.to('.battleStart', {
+                                    opacity: 0,
+                                    duration: 2
+                                })
+                            }
+                        })
+                        
+                    }
+                })
+                break
+            }
+        }
+    }
+
+    if (keys.w.pressed && lastKey === 'w') {
+        player.animate = true
+        player.image = player.sprites.up
+        console.log('up')
+        for (let i = 0; i < boundaries.length; i++) {
+            const boundary = boundaries[i]
+            
+            if (rectCollision({
+                rectangle1: player,
+                rectangle2: {...boundary, 
+                    position: {
+                        x: boundary.position.x,
+                        y: boundary.position.y + 4
+                }}
+            })) {
+
+                moving = false 
+                break
+            }
+        }
+        if (moving) 
+         moveable.forEach((moveable) => {
+            moveable.position.y += 4;
+            })
+    } else if (keys.s.pressed && lastKey === 's') {
+        player.animate = true
+        player.image = player.sprites.down
+        for (let i = 0; i < boundaries.length; i++) {
+            const boundary = boundaries[i]
+            if (rectCollision({
+                rectangle1: player,
+                rectangle2: {...boundary, 
+                    position: {
+                        x: boundary.position.x,
+                        y: boundary.position.y - 4
+                }}
+            })) {
+
+                moving = false 
+                break
+            }
+        }
+        if (moving) 
+        moveable.forEach((moveable) => {
+            moveable.position.y -= 4;
+        })
+    } else if (keys.a.pressed && lastKey === 'a') {
+        player.animate = true
+        player.image = player.sprites.left
+        for (let i = 0; i < boundaries.length; i++) {
+            const boundary = boundaries[i]
+            if (rectCollision({
+                rectangle1: player,
+                rectangle2: {...boundary, 
+                    position: {
+                        x: boundary.position.x + 4,
+                        y: boundary.position.y 
+                }}
+            })) {
+
+                moving = false 
+                break
+            }
+        }
+        if (moving) 
+        moveable.forEach((moveable) => {
+        moveable.position.x += 4;
+        })
+    } else if (keys.d.pressed && lastKey === 'd') {
+        player.animate = true
+        player.image = player.sprites.right
+        for (let i = 0; i < boundaries.length; i++) {
+            const boundary = boundaries[i]
+            if (rectCollision({
+                rectangle1: player,
+                rectangle2: {...boundary, 
+                    position: {
+                        x: boundary.position.x - 4,
+                        y: boundary.position.y 
+                }}
+            })) {
+
+                moving = false 
+                break
+            }
+        }
+        if (moving) 
+        moveable.forEach((moveable) => {
+        moveable.position.x -= 4;
+        })
+    }
+}
+///animate();
+
+
+
+
+const battleBackground = new Sprite({
+    position: {
+        x: 0,
+        y: 0
+    },
+    image: battleBackgroundImage
+})
+
+const boss = new Sprite({
+    position: {
+        x: 725,
+        y: 25
+    },
+    image: bossImage
+})
+
+const trainer = new Sprite({
+    position: {
+        x: 320,
+        y: 360
+    },
+    image: trainerImage
+})
+
+function animateBattle() {
+    window.requestAnimationFrame(animateBattle)
+    battleBackground.draw();
+    boss.draw();
+    trainer.draw();
+    
+}
+
+animateBattle();
