@@ -102,7 +102,7 @@ collisionsMap.forEach((row, i) => {
 
 
 class Sprite {
-    constructor({position, image, frames = { max: 1, hold: 10}, sprites, animate = false}) {
+    constructor({position, image, frames = { max: 1, hold: 10}, sprites, animate = false, isEnemy = false}) {
         this.position = position
         this.image = image
         this.frames = {...frames, val: 0, elasped:0}
@@ -114,10 +114,15 @@ class Sprite {
 
         }
         this.animate = animate
+        this.opacity = 1
+        this.health = 100
+        this.isEnemy = isEnemy
         
     }
 
     draw() {
+        c.save()
+        c.globalAlpha = this.opacity
         c.drawImage(
             this.image,
             this.frames.val * this.width,
@@ -129,6 +134,7 @@ class Sprite {
             this.image.width/this.frames.max,
             this.image.height
         );
+        c.restore();
         
         if (!this.animate) return
 
@@ -144,6 +150,15 @@ class Sprite {
     
     attack({attack, recipient}) {
         const tl = gsap.timeline()
+
+        this.health -= attack.damage
+
+        if (this.health == 0) {
+            gsap.to(recipient, {
+                opacity: 0,
+                duration: 2
+            })
+        }
 
         tl.to(this.position, {
             x: this.position.x - 40,
@@ -166,15 +181,71 @@ class Sprite {
         .to(this.position, {
             x: this.position.x,
             y: this.position.y,
-            onComplete() {
+            onComplete: () => {
                 gsap.to(recipient.position, {
                     x: recipient.position.x + 300,
-                    y: recipient.position.y - 80
-                    
+                    y: recipient.position.y - 80,
+                    onComplete: () => {
+                        gsap.to(recipient, {
+                            opacity: 0,
+                            repeat: 5,
+                            yoyo: true,
+                            duration: .05
+                    })
+                    }
                 })
-            } 
+            }
+        })
+        gsap.to('.bossHptwo', {
+            width: this.health + '%'
         })
 
+    }
+
+    enemyAttack({attack, recipient}) {
+        const tl = gsap.timeline()
+
+        this.health -= attack.damage
+
+        tl.to(this.position, {
+            x: this.position.x - 40,
+            onComplete() {
+                gsap.to(recipient.position, {
+                    x: recipient.position.x + 40
+                })
+            }
+        })
+        .to(this.position, {
+            x: this.position.x - 300,
+            y: this.position.y + 80,
+            onComplete() {
+                gsap.to(recipient.position, {
+                    x: recipient.position.x + 190,
+                    y: recipient.position.y - 150
+                })
+            }
+        })
+        .to(this.position, {
+            x: this.position.x,
+            y: this.position.y,
+            onComplete: () => {
+                gsap.to(recipient.position, {
+                    x: recipient.position.x - 190,
+                    y: recipient.position.y + 150,
+                    onComplete: () => {
+                        gsap.to(recipient, {
+                            opacity: 0,
+                            repeat: 5,
+                            yoyo: true,
+                            duration: .05
+                    })
+                    }
+                })
+            }
+        })
+        gsap.to('.playerHptwo', {
+            width: this.health + '%'
+        })
     }
 }
 
@@ -456,7 +527,8 @@ const boss = new Sprite({
         x: 725,
         y: 25
     },
-    image: bossImage
+    image: bossImage,
+    isEnemy: true
 })
 
 const trainer = new Sprite({
@@ -491,3 +563,53 @@ document.querySelectorAll('button').forEach(button => {
 
 
 animateBattle();
+
+
+
+//Rock Paper Scissors
+const moves = ["rock", "paper", "scissors"];
+let playerWin = 0;
+let compWin = 0;
+let tie = 0;
+
+function randomComputerChoice(move) {
+    move = moves[Math.floor(Math.random() * moves.length)];
+    return move;
+}
+
+function playerChoice() {
+    let playerMove = prompt("Enter your move: ");
+    return playerMove;
+}
+
+function gameplay() {
+    
+    let playerSelection = playerChoice();
+    console.log(playerSelection);
+    
+    let compSelection = randomComputerChoice();
+    console.log(compSelection);
+
+    if ((playerSelection == 'rock' && compSelection == 'scissors') || (playerSelection == 'paper' && compSelection == 'rock') || (playerSelection == 'scissors' && compSelection == 'paper')) {
+        console.log('player win');
+        winlosstie('win');
+    } else if ((playerSelection == 'rock' && compSelection == 'paper') || (playerSelection == 'paper' && compSelection == 'scissors') || (playerSelection == 'scissors' && compSelection == 'rock')) {
+        console.log('Comp wins');
+        winlosstie('loss');
+    } else {
+        console.log('Tie');
+        winlosstie();
+    }
+
+}
+
+function winlosstie(who) {
+    if (who == 'win') {
+        playerWin++;
+    } else if (who == 'loss') {
+        compWin++;
+    } else {
+        tie++;
+    }
+    console.log("Win: " + playerWin + " Loss: " + compWin + " Tie: " + tie);
+}
