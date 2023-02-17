@@ -52,3 +52,21 @@ What my goal is creating RockPaperSissors in JS:
    - while in battle scene, added trainer image and boss image
    - added boss image onto dungeon.png
    - will not set animation of trainer and boss image becuase it will take too long to create, but i have created a way to easily add sprite animation during battle scene
+
+2/11/2023: 4+hrs
+   - created health bar status for both enemy and player
+   - created health bar animation when enemy or player gets attacked
+   - created attack animations when either player or enemy attacks
+
+2/12/2023:
+   - finished setting up click event attack moves
+
+2/13-2/16:
+   - I have spend hours trying to figure out why .style.display kept coming out null. I found out it was because document.querySelector('.dialogue').style.display was targeting .dialogue which was within a div already and becuase of that it didnt work.
+   - Also i have spent many hours trying to finish this game up within this time frame:
+   - i have fixed healthbar so that if boss attacks player then player hp will get hurt.
+   - i have made it so that after player defeats boss, player can move freely in the overworld without any UI showing.
+   -currently I am trying to fix starting battle up again after defeating boss.
+   -okay i have completed the game's foundation
+   -I need to work on death transition, and actually implementing rock paper scissors game.
+
