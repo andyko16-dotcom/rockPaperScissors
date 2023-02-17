@@ -102,21 +102,21 @@ collisionsMap.forEach((row, i) => {
 
 
 class Sprite {
-    constructor({position, image, frames = { max: 1, hold: 10}, sprites, animate = false, isEnemy = false}) {
+    constructor({position, image, frames = { max: 1, hold: 10}, sprites, animate = false}) {
         this.position = position
-        this.image = image
+        this.image = new Image()
         this.frames = {...frames, val: 0, elasped:0}
         this.sprites = sprites
-
         this.image.onload = () => {
             this.width = this.image.width / this.frames.max;
             this.height = this.image.height;
 
         }
+        this.image.src = image.src
         this.animate = animate
         this.opacity = 1
-        this.health = 100
-        this.isEnemy = isEnemy
+
+
         
     }
 
@@ -147,108 +147,9 @@ class Sprite {
             else this.frames.val = 0
         }
     }
-    
-    attack({attack, recipient}) {
-        const tl = gsap.timeline()
-
-        this.health -= attack.damage
-
-        if (this.health == 0) {
-            gsap.to(recipient, {
-                opacity: 0,
-                duration: 2
-            })
-        }
-
-        tl.to(this.position, {
-            x: this.position.x - 40,
-            onComplete() {
-                gsap.to(recipient.position, {
-                    x: recipient.position.x + 40
-                })
-            }
-        })
-        .to(this.position, {
-            x: this.position.x + 190,
-            y: this.position.y - 150,
-            onComplete() {
-                gsap.to(recipient.position, {
-                    x: recipient.position.x - 300,
-                    y: recipient.position.y + 80
-                })
-            }
-        })
-        .to(this.position, {
-            x: this.position.x,
-            y: this.position.y,
-            onComplete: () => {
-                gsap.to(recipient.position, {
-                    x: recipient.position.x + 300,
-                    y: recipient.position.y - 80,
-                    onComplete: () => {
-                        gsap.to(recipient, {
-                            opacity: 0,
-                            repeat: 5,
-                            yoyo: true,
-                            duration: .05
-                    })
-                    }
-                })
-            }
-        })
-        gsap.to('.bossHptwo', {
-            width: this.health + '%'
-        })
-
-    }
-
-    enemyAttack({attack, recipient}) {
-        const tl = gsap.timeline()
-
-        this.health -= attack.damage
-
-        tl.to(this.position, {
-            x: this.position.x - 40,
-            onComplete() {
-                gsap.to(recipient.position, {
-                    x: recipient.position.x + 40
-                })
-            }
-        })
-        .to(this.position, {
-            x: this.position.x - 300,
-            y: this.position.y + 80,
-            onComplete() {
-                gsap.to(recipient.position, {
-                    x: recipient.position.x + 190,
-                    y: recipient.position.y - 150
-                })
-            }
-        })
-        .to(this.position, {
-            x: this.position.x,
-            y: this.position.y,
-            onComplete: () => {
-                gsap.to(recipient.position, {
-                    x: recipient.position.x - 190,
-                    y: recipient.position.y + 150,
-                    onComplete: () => {
-                        gsap.to(recipient, {
-                            opacity: 0,
-                            repeat: 5,
-                            yoyo: true,
-                            duration: .05
-                    })
-                    }
-                })
-            }
-        })
-        gsap.to('.playerHptwo', {
-            width: this.health + '%'
-        })
-    }
 }
 
+//overWorld Character
 const player = new Sprite ({
     position: {
         x: 470,
@@ -266,7 +167,6 @@ const player = new Sprite ({
         left: playerLeftImage,
         right: playerRightImage
     }
-
 })
 
 const background = new Sprite({
@@ -361,6 +261,14 @@ const battle = {
     initiated: false
 }
 
+const battleBackground = new Sprite({
+    position: {
+        x: 0,
+        y: 0
+    },
+    image: battleBackgroundImage
+})
+
 function animate() {
     const animationID = window.requestAnimationFrame(animate)
     background.draw()
@@ -389,21 +297,21 @@ function animate() {
                     rectangle2: battleZone
                 })
             ) {
-                console.log('activated battlezone')
                 battle.initiated = true
-                window.cancelAnimationFrame(animationID)
-                gsap.to('.battleStart', {
+                cancelAnimationFrame(animationID)
+                gsap.to('.overlappingDiv', {
                     opacity: 1,
                     repeat: 13,
                     yoyo: true,
                     duration: 0.1,
                     onComplete() {
-                        gsap.to('.battleStart', {
+                        gsap.to('.overlappingDiv', {
                             opacity: 1,
                             duration: 0.1,
                             onComplete() {
-                                animateBattle();
-                                gsap.to('.battleStart', {
+                                initBattle()
+                                animateBattle()
+                                gsap.to('.overlappingDiv', {
                                     opacity: 0,
                                     duration: 2
                                 })
@@ -412,7 +320,7 @@ function animate() {
                         
                     }
                 })
-                break
+                return
             }
         }
     }
@@ -420,7 +328,6 @@ function animate() {
     if (keys.w.pressed && lastKey === 'w') {
         player.animate = true
         player.image = player.sprites.up
-        console.log('up')
         for (let i = 0; i < boundaries.length; i++) {
             const boundary = boundaries[i]
             
@@ -509,107 +416,248 @@ function animate() {
         })
     }
 }
-///animate();
 
-
-
-
-const battleBackground = new Sprite({
-    position: {
-        x: 0,
-        y: 0
+const attacks = {
+    Rock: {
+        name: 'Rock',
+        damage: 100
     },
-    image: battleBackgroundImage
-})
-
-const boss = new Sprite({
-    position: {
-        x: 725,
-        y: 25
+    Paper: {
+        name: 'Paper',
+        damage: 20
     },
-    image: bossImage,
-    isEnemy: true
-})
+    Scissors: {
+        name: 'Scissors',
+        damage: 20
+    }
+}
 
-const trainer = new Sprite({
-    position: {
-        x: 320,
-        y: 360
-    },
-    image: trainerImage
-})
+
+
+//BATTLE SQUENCE
+
+class Fighter extends Sprite {
+    constructor({
+        isEnemy = false, 
+        name,
+        attacks,
+        position, image, frames = { max: 1, hold: 10}, sprites, animate = false
+    }) {
+        super({
+            position,
+            image,
+            frames,
+            sprites,
+            animate
+        })
+        this.isEnemy = isEnemy
+        this.name = name
+        this.health = 100
+        this.attacks = attacks
+    }
+
+    faint() {
+        document.querySelector('.dialogue').innerHTML = this.name + ' fainted!'
+        gsap.to(this.position, {
+            y: this.position.y + 20
+        })
+        gsap.to(this, {
+            opacity: 0
+        })
+    }
+
+    attack({attack, recipient}) {
+        //this opens dialogue box after move
+        document.querySelector('.dialogue').style.display = 'block';
+        document.querySelector('.dialogue').innerHTML = this.name + ' used ' + attack.name;
+
+
+        const tl = gsap.timeline()
+
+        recipient.health -= attack.damage
+
+
+
+
+
+        //attack animation
+        let movementDistance = 20
+        if (this.isEnemy) movementDistance = -20
+
+        let healthBar = '.bossHptwo'
+        if (this.isEnemy) healthBar = '.playerHptwo'
+
+        tl.to(this.position, {
+            x: this.position.x - movementDistance
+            })
+            .to(this.position, {
+                x: this.position.x + movementDistance * 2,
+                duration: 0.1,
+                onComplete: () => {
+                    gsap.to(healthBar, {
+                        width: recipient.health + '%'
+                    })
+
+                    gsap.to(recipient.position, {
+                        x: recipient.position.x + 10,
+                        yoyo: true,
+                        repeat: 5,
+                        duration: 0.08
+                    })
+
+                    gsap.to(recipient, {
+                        opacity: 0,
+                        repeat: 5,
+                        yoyo:true,
+                        duration: .08
+                    })
+                }
+            })
+            .to(this.position, {
+                x: this.position.x
+            })
+    }
+}
+
+
+let boss
+let trainer
+let battleAnimationID
+let queue
+
+function initBattle() {
+    document.querySelector('.userInterface').style.display = 'block'
+    document.querySelector('.dialogue').style.display = 'none'
+    document.querySelector('.bossHptwo').style.width = '100%'
+    document.querySelector('.playerHptwo').style.width = '100%'
+    document.querySelector('.attacksBox').replaceChildren()
+
+
+
+
+
+    queue = []
+    boss = new Fighter({
+        position: {
+            x: 725,
+            y: 25
+        },
+        image: {
+            src:'img/boss.png'
+        },
+        isEnemy: true,
+        name: 'Boss',
+        attacks: [attacks.Rock, attacks.Paper, attacks.Scissors]
+    })
+
+    trainer = new Fighter({
+        position: {
+            x: 320,
+            y: 360
+        },
+        image: {
+            src:'img/trainer.png'
+        },
+        name: 'Red',
+        attacks: [attacks.Rock, attacks.Paper, attacks.Scissors]
+    })
+
+    //ATTACKINGBOX
+    trainer.attacks.forEach(attack => {
+        const button = document.createElement('button')
+        button.innerHTML = attack.name
+        document.querySelector('.attacksBox').append(button)
+    })
+    //ATTACKING SQUENCE
+    document.querySelectorAll('button').forEach((button) => {
+        button.addEventListener('click', (e) => {
+            const selectedAttack = attacks[e.currentTarget.innerHTML]
+            trainer.attack({
+                attack: selectedAttack,
+                recipient: boss
+            })
+    
+            //Boss faint
+            if (boss.health <= 0) {
+                queue.push(() => {
+                    boss.faint()
+                })
+                queue.push(() => {
+                    gsap.to('.overlappingDiv', {
+                        opacity: 1,
+                        onComplete: () => {
+                            window.cancelAnimationFrame(battleAnimationID)
+                            animate()
+                            document.querySelector('.userInterface').style.display = 'none'
+                            document.querySelector('.dialogue').style.display = 'none'
+                            gsap.to('.overlappingDiv', {
+                                opacity: 0
+                            })
+                            battle.initiated = false
+                        }
+                    })
+                })
+            }
+
+            //trainer Faint
+            if (trainer.health <= 0) {
+                queue.push(() => {
+                    trainer.faint()
+                })
+                queue.push(() => {
+                    gsap.to('.overlappingDiv', {
+                        opacity: 1,
+                        onComplete: () => {
+                            window.cancelAnimationFrame(battleAnimationID)
+                            animate()
+                            document.querySelector('.userInterface').style.display = 'none'
+                            document.querySelector('.dialogue').style.display = 'none'
+                            gsap.to('.overlappingDiv', {
+                                opacity: 0
+                            })
+                            battle.initiated = false
+                        }
+                    })
+                })
+            }
+
+    
+            //Boss Attack
+            const randomAttack = boss.attacks[Math.floor(Math.random() * boss.attacks.length)]
+    
+            queue.push(() => {
+                boss.attack({
+                    attack: randomAttack,
+                    recipient: trainer,
+                })
+                boss.isEnemy
+                
+            })
+        })
+    })
+}
+
+
 
 function animateBattle() {
-    window.requestAnimationFrame(animateBattle)
+    battleAnimationID = window.requestAnimationFrame(animateBattle)
     battleBackground.draw();
     boss.draw();
     trainer.draw();
     
 }
 
+//makes dialogue disappear
+document.querySelector('.dialogue').addEventListener('click', (e) => {
+    if (queue.length > 0) {
+        queue[0]()
+        queue.shift()
+    } else e.currentTarget.style.display = 'none'
 
-document.querySelectorAll('button').forEach(button => {
-    button.addEventListener('click', () => {
-        trainer.attack({
-            attack: {
-                name: 'ROCK',
-                damage: 20,
-            },
-            recipient: boss
-        })
-    })
 })
 
+animate();
 
 
-animateBattle();
-
-
-
-//Rock Paper Scissors
-const moves = ["rock", "paper", "scissors"];
-let playerWin = 0;
-let compWin = 0;
-let tie = 0;
-
-function randomComputerChoice(move) {
-    move = moves[Math.floor(Math.random() * moves.length)];
-    return move;
-}
-
-function playerChoice() {
-    let playerMove = prompt("Enter your move: ");
-    return playerMove;
-}
-
-function gameplay() {
-    
-    let playerSelection = playerChoice();
-    console.log(playerSelection);
-    
-    let compSelection = randomComputerChoice();
-    console.log(compSelection);
-
-    if ((playerSelection == 'rock' && compSelection == 'scissors') || (playerSelection == 'paper' && compSelection == 'rock') || (playerSelection == 'scissors' && compSelection == 'paper')) {
-        console.log('player win');
-        winlosstie('win');
-    } else if ((playerSelection == 'rock' && compSelection == 'paper') || (playerSelection == 'paper' && compSelection == 'scissors') || (playerSelection == 'scissors' && compSelection == 'rock')) {
-        console.log('Comp wins');
-        winlosstie('loss');
-    } else {
-        console.log('Tie');
-        winlosstie();
-    }
-
-}
-
-function winlosstie(who) {
-    if (who == 'win') {
-        playerWin++;
-    } else if (who == 'loss') {
-        compWin++;
-    } else {
-        tie++;
-    }
-    console.log("Win: " + playerWin + " Loss: " + compWin + " Tie: " + tie);
-}
+//initBattle();
+//animateBattle();
