@@ -10,37 +10,48 @@
 </head>
 <body>
 
+    
 
     <div class="mainDisplay">
         
-        <div class="battleStart"></div>
 
-        <div class="bossStatus">
-            <h1>Boss</h1>
-            <div style="position:relative;">
-                <div class="bossHp"></div>
-                <div class="bossHptwo"></div>
-            </div>
-        </div>
-
-        <div class="playerStatus">
-            <h1>Red</h1>
-            <div style="position: relative;">
-                <div class="playerHp"></div>
-                <div class="playerHptwo"></div>
-            </div>
-        </div>
-
-
+        
+        <div class="overlappingDiv"></div>
         <canvas></canvas>
 
+        
+        <div class="dialogue"></div>
+
+        <div class="userInterface">
 
 
-        <div class="battleMenu">
-            <button class="rock">ROCK</button>
-            <button class="paper">PAPER</button>
-            <button class="Scissors">SCISSORS</button>
+            <div class="bossStatus">
+                <h1>Boss</h1>
+                <div style="position:relative;">
+                    <div class="bossHp"></div>
+                    <div class="bossHptwo"></div>
+                </div>
+            </div>
+
+            <div class="playerStatus">
+                <h1>Red</h1>
+                <div style="position: relative;">
+                    <div class="playerHp"></div>
+                    <div class="playerHptwo"></div>
+                </div>
+            </div>
+
+
+
+            <div class="attacksBox"></div>
         </div>
+        
+        
+
+
+
+
+
 
 
 
@@ -52,10 +63,11 @@
             integrity="sha512-H6cPm97FAsgIKmlBA4s774vqoN24V5gSQL4yBTDOY2su2DeXZVhQPxFK4P6GPdnZqM9fg1G3cMv5wD7e6cFLZQ==" 
             crossorigin="anonymous" 
             referrerpolicy="no-referrer"></script>
-    <script type = 'module' src="index.js"></script>
-    <script type = 'module' src="script.js"></script>
     <script type = 'module' src="data/collisions.js"></script>
     <script type = 'module' src="data/battleZone.js"></script>
+    <script type = 'module' src="index.js"></script>
+    <script type = 'module' src="script.js"></script>
+
 
 
 </body>
