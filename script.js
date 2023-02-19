@@ -572,6 +572,11 @@ function initBattle() {
             console.log(selectedAttack.name)
             const randomAttack = boss.attacks[Math.floor(Math.random() * boss.attacks.length)]
             console.log(randomAttack.name)
+
+
+
+//change this to if statment with conditionals of selectedAttack vs. randomAttack, winning conditionals will have player attack boss, lossing conditionals will have boss attack.
+        /*  
         trainer.attack({
             attack: selectedAttack,
             recipient: boss
@@ -586,8 +591,12 @@ function initBattle() {
                 boss.isEnemy
                 
             })
+*/
 
-            //win dialogue
+
+
+//over here will need to add lossing and winning dialogue with innerHTML to document.querySelector('.dialogue') or set it in faint() or Do we even need a ending dialogue?
+            //win dialogue (ending)
             //Boss faint
             if (boss.health <= 0) {
                 queue.push(() => {
@@ -609,7 +618,7 @@ function initBattle() {
                     })
                 })
             }
-            //death dialogue - gameover try again - send them back to the start of the game
+            //death dialogue - gameover try again - send them back to the start of the game (ending)
             //trainer Faint
             if (trainer.health <= 0) {
                 queue.push(() => {
@@ -659,3 +668,27 @@ animate();
 
 //initBattle();
 //animateBattle();
+
+//i am going to create function with three cases from within a switch statement.
+/* switch (minigame)
+    case (minigame = rock) rock will be playable asteroids on lives, fast moving rocks, three lives, instincts
+        will load minigame canvas and be playable here in this case
+        then will end minigame after time limit or loss
+        if player win, then attack boss
+        if player loss minigame, then player lose hp
+        break
+    
+    case (minigame = paper) paper will be a mashing game spacebar masher, boss will be set speed but fast, but player must be faster (PACMAN? not button masher)
+        will load minigame canvas and be playable here in this case
+        then will end minigame after time limit or loss
+        if player win, then attack boss
+        if player loss minigame, then player lose hp
+        break
+    
+    case (minigame = scissors) scissors will be a dodging game like a bullet hell game.
+        will load minigame canvas and be playable here in this case
+        then will end minigame after time limit or loss
+        if player win, then attack boss
+        if player loss minigame, then player lose hp
+        break
+*/
