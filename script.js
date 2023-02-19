@@ -62,7 +62,7 @@ class Boundary {
     }
     
     draw() {
-        c.fillStyle = 'rgba(255, 0, 0, 0.5)'
+        c.fillStyle = 'rgba(255, 0, 0, 0)'
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
     }
 }
@@ -296,7 +296,7 @@ function animate() {
                     rectangle1: player,
                     rectangle2: battleZone
                 })
-            ) {
+            ) { // this is battle transition
                 battle.initiated = true
                 cancelAnimationFrame(animationID)
                 gsap.to('.overlappingDiv', {
@@ -420,7 +420,7 @@ function animate() {
 const attacks = {
     Rock: {
         name: 'Rock',
-        damage: 100
+        damage: 20
     },
     Paper: {
         name: 'Paper',
@@ -455,7 +455,7 @@ class Fighter extends Sprite {
         this.health = 100
         this.attacks = attacks
     }
-
+    //creates dialogue and death animation
     faint() {
         document.querySelector('.dialogue').innerHTML = this.name + ' fainted!'
         gsap.to(this.position, {
@@ -468,6 +468,8 @@ class Fighter extends Sprite {
 
     attack({attack, recipient}) {
         //this opens dialogue box after move
+        //calculates damage
+        //creates animations
         document.querySelector('.dialogue').style.display = 'block';
         document.querySelector('.dialogue').innerHTML = this.name + ' used ' + attack.name;
 
@@ -475,18 +477,15 @@ class Fighter extends Sprite {
         const tl = gsap.timeline()
 
         recipient.health -= attack.damage
-
-
-
-
-
-        //attack animation
-        let movementDistance = 20
-        if (this.isEnemy) movementDistance = -20
-
         let healthBar = '.bossHptwo'
         if (this.isEnemy) healthBar = '.playerHptwo'
 
+        //attack animation
+
+        let movementDistance = 20
+        if (this.isEnemy) movementDistance = -20
+
+        //both player and boss movement
         tl.to(this.position, {
             x: this.position.x - movementDistance
             })
@@ -526,16 +525,13 @@ let battleAnimationID
 let queue
 
 function initBattle() {
+
+    //reinitializing
     document.querySelector('.userInterface').style.display = 'block'
     document.querySelector('.dialogue').style.display = 'none'
     document.querySelector('.bossHptwo').style.width = '100%'
     document.querySelector('.playerHptwo').style.width = '100%'
     document.querySelector('.attacksBox').replaceChildren()
-
-
-
-
-
     queue = []
     boss = new Fighter({
         position: {
@@ -562,21 +558,36 @@ function initBattle() {
         attacks: [attacks.Rock, attacks.Paper, attacks.Scissors]
     })
 
-    //ATTACKINGBOX
+    //creates ATTACKINGBOX
     trainer.attacks.forEach(attack => {
         const button = document.createElement('button')
         button.innerHTML = attack.name
         document.querySelector('.attacksBox').append(button)
     })
+
     //ATTACKING SQUENCE
     document.querySelectorAll('button').forEach((button) => {
         button.addEventListener('click', (e) => {
             const selectedAttack = attacks[e.currentTarget.innerHTML]
-            trainer.attack({
-                attack: selectedAttack,
-                recipient: boss
+            console.log(selectedAttack.name)
+            const randomAttack = boss.attacks[Math.floor(Math.random() * boss.attacks.length)]
+            console.log(randomAttack.name)
+        trainer.attack({
+            attack: selectedAttack,
+            recipient: boss
+        }) //^ player selecting attack
+
+            //Boss Attack
+            queue.push(() => {
+                boss.attack({
+                    attack: randomAttack,
+                    recipient: trainer,
+                })
+                boss.isEnemy
+                
             })
-    
+
+            //win dialogue
             //Boss faint
             if (boss.health <= 0) {
                 queue.push(() => {
@@ -598,7 +609,7 @@ function initBattle() {
                     })
                 })
             }
-
+            //death dialogue - gameover try again - send them back to the start of the game
             //trainer Faint
             if (trainer.health <= 0) {
                 queue.push(() => {
@@ -620,19 +631,6 @@ function initBattle() {
                     })
                 })
             }
-
-    
-            //Boss Attack
-            const randomAttack = boss.attacks[Math.floor(Math.random() * boss.attacks.length)]
-    
-            queue.push(() => {
-                boss.attack({
-                    attack: randomAttack,
-                    recipient: trainer,
-                })
-                boss.isEnemy
-                
-            })
         })
     })
 }
