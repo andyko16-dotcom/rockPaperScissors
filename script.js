@@ -519,6 +519,21 @@ class Fighter extends Sprite {
 }
 
 
+function minigames(player, computer) {
+    switch (player, computer) {
+
+        case player == 'Rock', computer == 'Rock':
+            console.log('ROCK')
+            break
+        case player == 'Paper', computer == 'Paper':
+            console.log('PAPER')
+            break 
+        case player == 'Scissors', computer == 'Scissors':
+            console.log('SCISSORS')
+            break
+    }
+}
+
 let boss
 let trainer
 let battleAnimationID
@@ -569,15 +584,38 @@ function initBattle() {
     document.querySelectorAll('button').forEach((button) => {
         button.addEventListener('click', (e) => {
             const selectedAttack = attacks[e.currentTarget.innerHTML]
-            console.log(selectedAttack.name)
-            const randomAttack = boss.attacks[Math.floor(Math.random() * boss.attacks.length)]
-            console.log(randomAttack.name)
+            console.log(selectedAttack)
+    
+            let randomAttack = boss.attacks[Math.floor(Math.random() * boss.attacks.length)]
+            console.log(randomAttack)
+        
+            
+            
 
+            if ((selectedAttack.name == 'Rock' && randomAttack.name == 'Scissors') || (selectedAttack.name == 'Paper' && randomAttack.name == 'Rock') || (selectedAttack.name == 'Scissors' && randomAttack.name == 'Paper')) {
+                
+                trainer.attack({
+                    attack: selectedAttack,
+                    recipient: boss
+                })
+
+            } else if ((selectedAttack.name == 'Rock' && randomAttack.name == 'Paper') || (selectedAttack.name == 'Paper' && randomAttack.name == 'Scissors') || (selectedAttack.name == 'Scissors' && randomAttack.name == 'Rock')) {
+                
+                boss.attack({
+                    attack: randomAttack,
+                    recipient: trainer,
+                })
+                boss.isEnemy
+
+            } else {
+                minigames(selectedAttack.name, randomAttack.name)
+                
+            }
 
 
 //change this to if statment with conditionals of selectedAttack vs. randomAttack, winning conditionals will have player attack boss, lossing conditionals will have boss attack.
-        /*  
-        trainer.attack({
+         
+        /*trainer.attack({
             attack: selectedAttack,
             recipient: boss
         }) //^ player selecting attack
@@ -590,8 +628,8 @@ function initBattle() {
                 })
                 boss.isEnemy
                 
-            })
-*/
+            })*/
+
 
 
 
@@ -646,6 +684,10 @@ function initBattle() {
 
 
 
+
+
+
+
 function animateBattle() {
     battleAnimationID = window.requestAnimationFrame(animateBattle)
     battleBackground.draw();
@@ -671,24 +713,32 @@ animate();
 
 //i am going to create function with three cases from within a switch statement.
 /* switch (minigame)
-    case (minigame = rock) rock will be playable asteroids on lives, fast moving rocks, three lives, instincts
+    case (minigame = Rock) Rock will be playable asteroids on lives, fast moving rocks, three lives, instincts
         will load minigame canvas and be playable here in this case
         then will end minigame after time limit or loss
         if player win, then attack boss
         if player loss minigame, then player lose hp
         break
     
-    case (minigame = paper) paper will be a mashing game spacebar masher, boss will be set speed but fast, but player must be faster (PACMAN? not button masher)
+    case (minigame = Paper) Paper will be a mashing game spacebar masher, boss will be set speed but fast, but player must be faster (PACMAN? not button masher)
         will load minigame canvas and be playable here in this case
         then will end minigame after time limit or loss
         if player win, then attack boss
         if player loss minigame, then player lose hp
         break
     
-    case (minigame = scissors) scissors will be a dodging game like a bullet hell game.
+    case (minigame = Scissors) Scissors will be a dodging game like a bullet hell game.
         will load minigame canvas and be playable here in this case
         then will end minigame after time limit or loss
         if player win, then attack boss
         if player loss minigame, then player lose hp
         break
 */
+
+
+
+
+//practice for creating letters on screen one at a time
+
+
+
