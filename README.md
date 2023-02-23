@@ -70,7 +70,16 @@ What my goal is creating RockPaperSissors in JS:
    -okay i have completed the game's foundation
    -I need to work on death transition, and actually implementing rock paper scissors game.
 
-2/17/16:
+2/17/2023:
    - i have completed the foundation of the game. i can move my character and play a round of pokemon type game.
    - i have yet to implement rock paper scissors and the three other minigames.
    - i am pretty close to solving the rockpaperscissors part by using if statements for rockpaperscissors and maybe use switch statments to initiate the three other minigames
+
+2/19/2023: 2hrs
+   -I have finished rock paper scissors foundation for the game
+   -I need to set it so that if i get a tie then i will trigger my switch statement.
+   -I also need to create introduction of the game and epilogue of game after beating boss
+
+2/20-2/22/2023: 3hrs
+   -I have created the introduction of my game with text printing one by one and set the background to fade away
+   
