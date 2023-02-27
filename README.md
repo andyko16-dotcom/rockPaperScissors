@@ -88,4 +88,13 @@ What my goal is creating RockPaperSissors in JS:
    -need to add what happens when tariner loses or when boss loses within faint()
    -for that I am going to make new divs one for win and one for loss with each of them doing their correspondence
 
+2/24/2023:
+   -break
+
+2/25-26/2023: 4hrs
+   - added introduction text
+   - added outro for win and loss
+   - added buttons for loss to try again
+   - finished the game
+
    
