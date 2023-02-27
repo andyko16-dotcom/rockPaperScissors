@@ -158,7 +158,7 @@ const player = new Sprite ({
     
     image: playerDownImage,
     frames: {
-        max: 2.99,
+        max: 3.09,
         hold: 10
     },
     sprites: {
@@ -455,16 +455,36 @@ class Fighter extends Sprite {
         this.health = 100
         this.attacks = attacks
     }
-    //creates dialogue and death animation
+    //creates dialogue and death animation; want to add outro when trainer or boss dies
     faint() {
         document.querySelector('.dialogue').innerHTML = this.name + ' fainted!'
         gsap.to(this.position, {
             y: this.position.y + 20
-        })
+            })
         gsap.to(this, {
             opacity: 0
         })
     }
+
+    /*  onComplete: => () {}
+                if (trainer.faint()) {
+                    document.querySelector(.dialogue).innerHTML = 'Would you like to try again?'
+
+                    const button = document.createElement('button')
+                    button.innerHTML = 'Yes' || 'No'
+                
+                document.querySelectorAll('button').forEach((button) => {
+                button.addEventListener('click', (e) => {
+                    const trainerChoice = e.currentTarget.innerHTML
+                    if (trainerChoice == 'yes) {
+                        then began battleanimation()
+                    } else {
+                        display outro you lose try again
+                    }
+                } else {
+                    display you win outro and show credits
+                }
+            */ 
 
     attack({attack, recipient}) {
         //this opens dialogue box after move
@@ -516,21 +536,10 @@ class Fighter extends Sprite {
                 x: this.position.x
             })
     }
-}
 
-
-function minigames(player, computer) {
-    switch (player, computer) {
-
-        case player == 'Rock', computer == 'Rock':
-            console.log('ROCK')
-            break
-        case player == 'Paper', computer == 'Paper':
-            console.log('PAPER')
-            break 
-        case player == 'Scissors', computer == 'Scissors':
-            console.log('SCISSORS')
-            break
+    tie() {
+        document.querySelector('.dialogue').style.display = 'block';
+        document.querySelector('.dialogue').innerHTML = 'Tie';
     }
 }
 
@@ -607,6 +616,10 @@ function initBattle() {
                 })
                 boss.isEnemy
 
+            } else if ((selectedAttack.name == 'Rock' && randomAttack.name == 'Rock') || (selectedAttack.name == 'Paper' && randomAttack.name == 'Paper') || (selectedAttack.name == 'Scissors' && randomAttack.name == 'Scissors')) {
+                trainer.tie()
+
+            
             } else {
                 minigames(selectedAttack.name, randomAttack.name)
                 
@@ -644,12 +657,21 @@ function initBattle() {
                     gsap.to('.overlappingDiv', {
                         opacity: 1,
                         onComplete: () => {
-                            window.cancelAnimationFrame(battleAnimationID)
-                            animate()
                             document.querySelector('.userInterface').style.display = 'none'
                             document.querySelector('.dialogue').style.display = 'none'
-                            gsap.to('.overlappingDiv', {
-                                opacity: 0
+                            document.querySelector('.win').style.display = 'flex'
+                            gsap.to('.win', {
+                                opacity: 1,
+                                duration: 4,
+                                onComplete: () => {
+                                    document.querySelector('.win').innerHTML = 'Refresh to play again'
+                                    gsap.to('.win', {
+                                        opacity: 0,
+                                        repeat: 100,
+                                        duration: 1
+                                    })
+                                }
+
                             })
                             battle.initiated = false
                         }
@@ -666,26 +688,41 @@ function initBattle() {
                     gsap.to('.overlappingDiv', {
                         opacity: 1,
                         onComplete: () => {
-                            window.cancelAnimationFrame(battleAnimationID)
-                            animate()
                             document.querySelector('.userInterface').style.display = 'none'
                             document.querySelector('.dialogue').style.display = 'none'
-                            gsap.to('.overlappingDiv', {
-                                opacity: 0
+                            document.querySelector('.loss').style.display = 'flex'
+                            gsap.to('.loss', {
+                                opacity: 1,
+                                duration: 2
                             })
-                            battle.initiated = false
                         }
                     })
+                    battle.initiated = false
                 })
             }
         })
     })
 }
 
+/*
+                queue.push(() => {
+                    gsap.to('.overlappingDiv', {
+                        opacity: 1,
+                        onComplete: () => {
+                            window.cancelAnimationFrame(battleAnimationID)
+                            //animate()
+                            document.querySelector('.userInterface').style.display = 'none'
+                            document.querySelector('.dialogue').style.display = 'none'
+                            gsap.to('.overlappingDiv', {
+                                opacity: 0
+                            })
+                            //battle.initiated = false
+                        }
+                    })
+                })
+*/
 
-
-
-
+//battle.initiated = false
 
 
 function animateBattle() {
@@ -704,6 +741,53 @@ document.querySelector('.dialogue').addEventListener('click', (e) => {
     } else e.currentTarget.style.display = 'none'
 
 })
+
+//this is for the button when you lose to the boss
+document.querySelector('.yes').addEventListener('click', (e) => {
+    const playerChoice = e.currentTarget.innerHTML
+    if (playerChoice == 'Yes') {
+        console.log('yes')
+        animate();
+        gsap.to('.loss', {
+            opacity: 0,
+            duration: 2,
+            onComplete: () => {
+                document.querySelector('.loss').style.display = 'none'
+                document.querySelector('.overlappingDiv').style.display = 'none'
+            }
+        })
+    } else {
+        return
+
+    }
+
+})
+
+
+document.querySelector('.no').addEventListener('click', (e) => {
+    const playerChoice = e.currentTarget.innerHTML
+    if (playerChoice == 'No') {
+        console.log('no')
+        gsap.to('.loss', {
+            opacity: 0,
+            duration: 2,
+            onComplete: () => {
+                document.querySelector('.loss').style.display = 'none'
+                document.querySelector('.win').innerHTML = 'GAMEOVER'
+                document.querySelector('.win').style.display = 'flex'
+                gsap.to('.win', {
+                    opacity: 1,
+                    duration: 2
+                })
+            }
+        })
+    } else {
+        return
+
+    }
+
+})
+
 
 animate();
 
@@ -734,11 +818,3 @@ animate();
         if player loss minigame, then player lose hp
         break
 */
-
-
-
-
-//practice for creating letters on screen one at a time
-
-
-
