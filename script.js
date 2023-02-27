@@ -466,25 +466,7 @@ class Fighter extends Sprite {
         })
     }
 
-    /*  onComplete: => () {}
-                if (trainer.faint()) {
-                    document.querySelector(.dialogue).innerHTML = 'Would you like to try again?'
 
-                    const button = document.createElement('button')
-                    button.innerHTML = 'Yes' || 'No'
-                
-                document.querySelectorAll('button').forEach((button) => {
-                button.addEventListener('click', (e) => {
-                    const trainerChoice = e.currentTarget.innerHTML
-                    if (trainerChoice == 'yes) {
-                        then began battleanimation()
-                    } else {
-                        display outro you lose try again
-                    }
-                } else {
-                    display you win outro and show credits
-                }
-            */ 
 
     attack({attack, recipient}) {
         //this opens dialogue box after move
@@ -626,22 +608,7 @@ function initBattle() {
             }
 
 
-//change this to if statment with conditionals of selectedAttack vs. randomAttack, winning conditionals will have player attack boss, lossing conditionals will have boss attack.
-         
-        /*trainer.attack({
-            attack: selectedAttack,
-            recipient: boss
-        }) //^ player selecting attack
 
-            //Boss Attack
-            queue.push(() => {
-                boss.attack({
-                    attack: randomAttack,
-                    recipient: trainer,
-                })
-                boss.isEnemy
-                
-            })*/
 
 
 
@@ -704,25 +671,7 @@ function initBattle() {
     })
 }
 
-/*
-                queue.push(() => {
-                    gsap.to('.overlappingDiv', {
-                        opacity: 1,
-                        onComplete: () => {
-                            window.cancelAnimationFrame(battleAnimationID)
-                            //animate()
-                            document.querySelector('.userInterface').style.display = 'none'
-                            document.querySelector('.dialogue').style.display = 'none'
-                            gsap.to('.overlappingDiv', {
-                                opacity: 0
-                            })
-                            //battle.initiated = false
-                        }
-                    })
-                })
-*/
 
-//battle.initiated = false
 
 
 function animateBattle() {
@@ -794,27 +743,3 @@ animate();
 
 //initBattle();
 //animateBattle();
-
-//i am going to create function with three cases from within a switch statement.
-/* switch (minigame)
-    case (minigame = Rock) Rock will be playable asteroids on lives, fast moving rocks, three lives, instincts
-        will load minigame canvas and be playable here in this case
-        then will end minigame after time limit or loss
-        if player win, then attack boss
-        if player loss minigame, then player lose hp
-        break
-    
-    case (minigame = Paper) Paper will be a mashing game spacebar masher, boss will be set speed but fast, but player must be faster (PACMAN? not button masher)
-        will load minigame canvas and be playable here in this case
-        then will end minigame after time limit or loss
-        if player win, then attack boss
-        if player loss minigame, then player lose hp
-        break
-    
-    case (minigame = Scissors) Scissors will be a dodging game like a bullet hell game.
-        will load minigame canvas and be playable here in this case
-        then will end minigame after time limit or loss
-        if player win, then attack boss
-        if player loss minigame, then player lose hp
-        break
-*/
