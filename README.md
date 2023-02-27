@@ -98,3 +98,11 @@ What my goal is creating RockPaperSissors in JS:
    - finished the game
 
    
+
+   
+   CREDITS:
+
+   Chris Courses: this tutorial helped me build 90% of this project
+   https://www.youtube.com/watch?v=yP5DKzriqXA&t=25010s
+   
+   sprites: I just found them on sprites-resources
