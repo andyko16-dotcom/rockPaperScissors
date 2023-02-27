@@ -14,7 +14,7 @@ document.getElementById("introduction").innerHTML += myArray.shift();
 
     gsap.to('#introduction', {
         opacity:0,
-        duration: 3,
+        duration: 1,
         onComplete: () => {
             document.querySelector('#introduction').style.display = 'none'
             gsap.to('#introductionbackground', {
@@ -33,7 +33,7 @@ return false;
 
 }
 
-loopTimer = setTimeout('frameLooper()',10);
+loopTimer = setTimeout('frameLooper()',30);
 
 }
 
