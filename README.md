@@ -82,4 +82,10 @@ What my goal is creating RockPaperSissors in JS:
 
 2/20-2/22/2023: 3hrs
    -I have created the introduction of my game with text printing one by one and set the background to fade away
+
+2/23/2023:
+   -one thing that my game doesnt have is .dialogue not printing out 'Tie' when trainer and boss both play same move.
+   -need to add what happens when tariner loses or when boss loses within faint()
+   -for that I am going to make new divs one for win and one for loss with each of them doing their correspondence
+
    
